@@ -21,4 +21,67 @@ This project is a full-stack, community-driven platform developed in Django (bac
 
 ## Development Roadmap
 
-Development is organized as daily modules covering Git setup, database schema, authentication, frontend-backend integration, real-time communication, admin tooling, and deployment. This schedule maximizes learning by incorporating end-to-end delivery and encourages a continuous feedback cycle from early users.[2][3][1]
+Development is organized as daily modules covering Git setup, database schema, authentication, frontend-backend integration, real-time communication, admin tooling, and deployment. This schedule maximizes learning by incorporating end-to-end delivery and encourages a continuous feedback cycle from early users.
+
+
+
+
+
+
+
+Entity relationship diagram(ERD)
+┌───────────────────────────┐
+│        UserProfile        │
+│───────────────────────────│
+│ id (PK)                   │
+│ name                      │
+│ email (unique)            │
+│ bio                       │
+│ joined_at                 │
+└──────────────┬────────────┘
+               │ 1 (creates)
+               │
+               │
+┌──────────────▼────────────┐      ┌────────────────────────────┐
+│        Community           │      │         Listing            │
+│────────────────────────────│      │────────────────────────────│
+│ id (PK)                    │      │ id (PK)                   │
+│ name (unique)              │      │ title                     │
+│ description                │      │ description               │
+│ created_by (FK → User)     │      │ created_by (FK → User)    │
+│ created_at                 │      │ community (FK → Community)│
+└──────────────┬─────────────┘      │ created_at                │
+               │                    │ updated_at                │
+               │                    └────────────────────────────┘
+               │
+               │ many-to-many
+               │
+       ┌───────▼────────┐
+       │ UserProfile     │
+       │ (members)       │
+       └─────────────────┘
+
+
+
+
+Entity Relationship Diagram (ERD)
+UserProfile
+├── name : string
+├── email : string (unique)
+├── bio : text (optional)
+└── joined_at : datetime
+
+Community
+├── name : string (unique)
+├── description : text (optional)
+├── created_by : FK → UserProfile
+├── members : ManyToMany → UserProfile
+└── created_at : datetime
+
+Listing
+├── title : string
+├── description : text
+├── created_by : FK → UserProfile
+├── community : FK → Community
+├── created_at : datetime
+└── updated_at : datetime
