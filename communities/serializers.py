@@ -5,4 +5,4 @@ class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
         fields = '__all__'
-
+        read_only_fields = ('created_by', 'members', 'created_at')
