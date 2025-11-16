@@ -10,7 +10,7 @@ class CommunityListingView(generics.ListCreateAPIView):
     serializer_class = ListingSerializer
     permission_classes = [IsCommunityMemberOrReadOnly]
 
-    # ⭐ Add these three lines:
+    
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['created_by']           # filter by user
     search_fields = ['title', 'description']    # keyword search
