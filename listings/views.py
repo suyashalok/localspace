@@ -1,20 +1,28 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Listing
 from .serializers import ListingSerializer
+from .permissions import IsCommunityMemberOrReadOnly
+from communities.models import Community
 
-class ListingListCreateView(generics.ListCreateAPIView):
-    queryset = Listing.objects.all()
+
+class CommunityListingView(generics.ListCreateAPIView):
     serializer_class = ListingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsCommunityMemberOrReadOnly]
+
+    # ⭐ Add these three lines:
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['created_by']           # filter by user
+    search_fields = ['title', 'description']    # keyword search
+    ordering_fields = ['created_at', 'title']   # ordering
+
+    def get_queryset(self):
+        community_id = self.kwargs['community_id']
+        return Listing.objects.filter(community_id=community_id)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.userprofile)
-
-
-class ListingDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_update(self, serializer):
-        serializer.save(created_by=self.request.user.userprofile)
+        community = Community.objects.get(id=self.kwargs['community_id'])
+        serializer.save(
+            created_by=self.request.user.userprofile,
+            community=community
+        )

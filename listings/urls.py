@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import ListingListCreateView, ListingDetailView
+from .views import CommunityListingView
 
 urlpatterns = [
-    path('', ListingListCreateView.as_view(), name='listing-list'),
-    path('<int:pk>/', ListingDetailView.as_view(), name='listing-detail'),
+    path('community/<int:community_id>/', CommunityListingView.as_view(), name='community-listings'),
 ]
