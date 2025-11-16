@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'users',
     'communities',
     'listings',
+    'messaging',
 #third party
     'rest_framework'
 ]
