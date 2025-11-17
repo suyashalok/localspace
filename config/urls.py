@@ -28,7 +28,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/communities/', include('communities.urls')),
     path('api/listings/', include('listings.urls')),
-
+    path('api/messaging/', include('messaging.urls')),
     # Auth routes
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
